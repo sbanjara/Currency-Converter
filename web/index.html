@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+
+<html>
+
+    <head>
+
+       <title>CS 425 Lab #4</title>
+       <meta charset="utf-8">
+
+       <script type="text/javascript" src="scripts/jquery-3.4.1.min.js"></script>
+       <script type="text/javascript" src="scripts/Converter.js"></script>
+       
+       <link rel="stylesheet" type="text/css" href="Home.css">
+       <link href='https://fonts.googleapis.com/css?family=Syncopate' rel='stylesheet'>
+
+    </head>
+
+    <body>
+        
+      
+            
+        <header id ="header">
+
+            <p> CURRENCY CONVERTER </p>
+
+        </header>
+        
+        <section id="right_section">
+
+            <div id="form_one" class="container">
+
+                <form name="inputform" class="inputform" action="#">
+
+                    <label for="input">FROM:</label>
+
+                    <select name="in_code" id="in_code">
+
+                        <option value="USD">USD</option>
+                        <option value="CAD">CAD</option>
+                        <option value="GBP">GBP</option>
+                        <option value="INR">INR</option>
+                        <option value="HKD">HKD</option>
+                        <option value="ISK">ISK</option>
+                        <option value="PHP">PHP</option>
+                        <option value="DKK">DKK</option>
+                        <option value="HUF">HUF</option>
+                        <option value="CZK">CZK</option>
+                        <option value="RON">RON</option>
+                        <option value="SEK">SEK</option>
+                        <option value="IDR">IDR</option>
+                        <option value="BRL">BRL</option>
+                        <option value="RUB">RUB</option>
+                        <option value="HRK">HRK</option>
+                        <option value="JPY">JPY</option>
+                        <option value="THB">THB</option>
+                        <option value="CHF">CHF</option>
+                        <option value="EUR">EUR</option>
+                        <option value="MYR">MYR</option>
+                        <option value="BGN">BGN</option>
+                        <option value="TRY">TRY</option>
+                        <option value="CNY">CNY</option>
+                        <option value="NOK">NOK</option>
+                        <option value="NZD">NZD</option>
+                        <option value="ZAR">ZAR</option>
+                        <option value="MXN">MXN</option>
+                        <option value="SGD">SGD</option>
+                        <option value="AUD">AUD</option>
+                        <option value="ILS">ILS</option>
+                        <option value="KRW">KRW</option>
+                        <option value="PLN">PLN</option>
+
+                    </select>
+
+                    <input type="text" name="input" id="input">
+
+                    <label for="input">TO:</label>
+
+                    <select name="out_code" id="out_code">
+
+                        <option value="USD">USD</option>
+                        <option value="CAD">CAD</option>
+                        <option value="GBP">GBP</option>
+                        <option value="INR">INR</option>
+                        <option value="HKD">HKD</option>
+                        <option value="ISK">ISK</option>
+                        <option value="PHP">PHP</option>
+                        <option value="DKK">DKK</option>
+                        <option value="HUF">HUF</option>
+                        <option value="CZK">CZK</option>
+                        <option value="RON">RON</option>
+                        <option value="SEK">SEK</option>
+                        <option value="IDR">IDR</option>
+                        <option value="BRL">BRL</option>
+                        <option value="RUB">RUB</option>
+                        <option value="HRK">HRK</option>
+                        <option value="JPY">JPY</option>
+                        <option value="THB">THB</option>
+                        <option value="CHF">CHF</option>
+                        <option value="EUR">EUR</option>
+                        <option value="MYR">MYR</option>
+                        <option value="BGN">BGN</option>
+                        <option value="TRY">TRY</option>
+                        <option value="CNY">CNY</option>
+                        <option value="NOK">NOK</option>
+                        <option value="NZD">NZD</option>
+                        <option value="ZAR">ZAR</option>
+                        <option value="MXN">MXN</option>
+                        <option value="SGD">SGD</option>
+                        <option value="AUD">AUD</option>
+                        <option value="ILS">ILS</option>
+                        <option value="KRW">KRW</option>
+                        <option value="PLN">PLN</option>
+
+                    </select>
+
+                    <input type="button" value="Convert" onclick="Converter.getConversion();">
+
+                </form>
+
+            </div>
+
+            <div class="container" id="form_two">
+
+                <form name="inputform" class="inputform" action="#">
+
+                    <label for="input">Amount (in USD):</label>
+
+                    <input type="text" name="input" id="input_two">
+
+                    <input type="button" value="Convert" onclick="Converter.getAllconversion();">
+
+                </form>
+
+            </div>
+            
+        </section>
+
+        <section id="left_section">
+        
+            <div class="button" onclick="display_form_one();">
+
+                <p> One to One </p>
+
+            </div>
+
+            <div class="button" onclick="display_form_two();">
+
+                <p> One to many </p>
+
+            </div>
+            
+        </section>
+        
+         <div id="output"></div>
+
+        <script type="text/javascript">
+            
+            function display_form_one() {
+                
+               document.getElementById("form_one").style.display = "block";
+               document.getElementById("form_two").style.display = "none";
+               document.getElementById("input").value = "";
+               $('#output').html(" ");
+            
+            };
+            
+            function display_form_two() {
+                
+                document.getElementById("form_one").style.display = "none";
+                document.getElementById("form_two").style.display = "block";
+                document.getElementById("input_two").value = "";
+                $('#output').html(" ");
+               
+            };
+
+            
+        </script>
+        
+    </body>
+
+</html>
