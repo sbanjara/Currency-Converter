@@ -1,2 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Context path="/Converter"/>
+<Context path="/Converter">
+    
+    <Resource auth="Container" 
+            driverClassName="com.mysql.jdbc.Driver"
+            initialSize="10" 
+            logAbandoned="true" 
+            maxTotal="100" 
+            maxIdle="30" 
+            maxWaitMillis="10000"
+            name="jdbc/db_pool" 
+            password="CS425!Lab3B"
+            removeAbandonedOnBorrow="true" 
+            removeAbandonedTimeout="60" 
+            testOnBorrow="true" 
+            testOnReturn="false" 
+            type="javax.sql.DataSource"
+            url="jdbc:mysql://localhost:3306/lab4b?zeroDateTimeBehavior=convertToNull&amp; allowMultiQueries=true&amp;verifyServerCertificate=false&amp;useSSL=true"
+            username="db_user"
+            validationQuery="SELECT 1" 
+            validationQueryTimeout="-1" 
+     /> 
+
+</Context>
