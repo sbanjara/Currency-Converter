@@ -80,9 +80,9 @@ body {
     
 }
 
-.button:hover {
+#button_one {
     
-    background-color:  #BC0000;
+    background-color: #BC0000;
     color: white;
-    
 }
+

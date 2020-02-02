@@ -137,13 +137,13 @@
 
         <section id="left_section">
         
-            <div class="button" onclick="display_form_one();">
+            <div class="button" id="button_one" onclick="display_form_one();">
 
                 <p> One to One </p>
 
             </div>
 
-            <div class="button" onclick="display_form_two();">
+            <div class="button" id="button_two" onclick="display_form_two();">
 
                 <p> One to many </p>
 
@@ -157,8 +157,12 @@
             
             function display_form_one() {
                 
-               document.getElementById("form_one").style.display = "block";
                document.getElementById("form_two").style.display = "none";
+               document.getElementById("form_one").style.display = "block";
+               document.getElementById("button_one").style.background = "#BC0000";
+               document.getElementById("button_one").style.color = "white";
+               document.getElementById("button_two").style.background = "lightgray";
+               document.getElementById("button_two").style.color = "black";
                document.getElementById("input").value = "";
                $('#output').html(" ");
             
@@ -168,6 +172,10 @@
                 
                 document.getElementById("form_one").style.display = "none";
                 document.getElementById("form_two").style.display = "block";
+                document.getElementById("button_one").style.background = "lightgray";
+                document.getElementById("button_one").style.color = "black";
+                document.getElementById("button_two").style.background = "#BC0000";
+                document.getElementById("button_two").style.color = "white";
                 document.getElementById("input_two").value = "";
                 $('#output').html(" ");
                
