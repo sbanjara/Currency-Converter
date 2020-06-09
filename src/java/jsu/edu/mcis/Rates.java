@@ -118,10 +118,8 @@ public class Rates {
             JSONObject rates = new JSONObject();            
             
             /* 
-             * Add rate data to "rates" container and add "date" and "base"
-             * values to "json" container.  See the "getRatesAsTable()" method
-             * for an example of how to get the CSV data from the list, and
-             * don't forget to skip the header row!s
+             * Adds rate data to "rates" container and add "date" and "base"
+             * values to "json" container.  
              */
             
             String[] header = iterator.next();
@@ -146,6 +144,10 @@ public class Rates {
         return (results.trim());
         
     }
+    
+    /*
+     * Gets the exchange rates from a database and returns a json string
+     */
     
     public static String getRatesAsJson(String code) throws NamingException, SQLException {
         
