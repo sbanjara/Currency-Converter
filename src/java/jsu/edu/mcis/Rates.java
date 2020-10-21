@@ -9,14 +9,23 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 public class Rates {
     
@@ -152,9 +161,15 @@ public class Rates {
     public static String getRatesAsJson(String code) throws NamingException, SQLException {
         
         String results = "";
+        String databaseDate = "";
         Context envContext = null, initContext = null;
         DataSource ds = null;
         Connection connection = null;
+        
+        long timestamp = System.currentTimeMillis();
+        GregorianCalendar cal = new GregorianCalendar();
+        cal.setTimeInMillis(timestamp);
+        String date = (new SimpleDateFormat("yyyy-MM-dd")).format(cal.getTime());
         
         PreparedStatement pstatement = null;
         ResultSet resultset = null;
@@ -173,15 +188,20 @@ public class Rates {
             connection = ds.getConnection();
             
             if (code != null)        
-                query = "SELECT * FROM rates WHERE code = ?";
+                query = "SELECT * FROM rates WHERE code = ? AND date = ?";
             
             else
-                query = "SELECT * FROM rates";
+                query = "SELECT * FROM rates WHERE date = ?";
             
             pstatement = connection.prepareStatement(query);
             
-            if (code != null)
+            if (code != null) {
                 pstatement.setString(1, code);
+                pstatement.setString(2, date);
+            }
+            else {
+                pstatement.setString(1, date);
+            }
             
             hasresults = pstatement.execute();
                 
@@ -193,6 +213,7 @@ public class Rates {
                     
                     String c = resultset.getString("code");
                     double r = resultset.getDouble("rate");
+                    databaseDate = resultset.getString("date");
                     rates.put(c, r);
                     
                 }
@@ -200,9 +221,9 @@ public class Rates {
             }          
             
             json.put("rates", rates);
-            json.put("date", "2019-09-30");
-            json.put("base", "USD");
-            
+            json.put("date", databaseDate);
+            json.put("base", "USD");   
+                
             results = JSONValue.toJSONString(json);
         
         }
@@ -221,7 +242,74 @@ public class Rates {
             
         }
         
-        return (results.trim());
+        if ( rates.isEmpty() && databaseDate.isEmpty() )
+            return null;
+        else 
+            return (results.trim());
+        
+    }
+    
+    public static void putRatesInDatabase(String jsonString) throws ParseException, SQLException {
+        
+        JSONParser parser = new JSONParser();
+        JSONObject jsonObject = (JSONObject) parser.parse(jsonString);
+        HashMap<String, Double> rates = (HashMap<String, Double>) jsonObject.get("rates");
+        String date = (String) jsonObject.get("date");
+        System.out.println(date);
+        Set keys = rates.keySet();
+        String[] code = new String[keys.size()];
+        Double[] rate = new Double[keys.size()];
+        
+        int count = 0;
+        for(Object key: keys){
+            String s = (String) key;
+            code[count] = s;
+            rate[count] = (Double) rates.get(s); 
+            count += 1;
+        } 
+        
+        Context envContext = null, initContext = null;
+        DataSource ds = null;
+        Connection connection = null;
+        PreparedStatement pstatement = null;
+        String query = null;
+        
+        try {
+            
+            envContext = new InitialContext();
+            initContext  = (Context)envContext.lookup("java:/comp/env");
+            ds = (DataSource)initContext.lookup("jdbc/db_pool");
+            connection = ds.getConnection();
+            
+            query = "INSERT INTO rates(code, rate, date) VALUES(?, ?, ?)";
+            pstatement = connection.prepareStatement(query);
+            
+            for( int i = 0; i < code.length; ++i ) {
+                
+                pstatement.setString(1, code[i]);
+                pstatement.setDouble(2, rate[i]);
+                pstatement.setString(3, date);
+                pstatement.addBatch();
+                
+            } 
+            
+            int[] r = pstatement.executeBatch();
+      
+        } 
+        
+        catch (SQLException e) { e.printStackTrace(); } 
+        
+        catch (NamingException ex) {
+            Logger.getLogger(Rates.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        finally {
+            
+            if (pstatement != null) { try { pstatement.close(); pstatement = null; } catch (Exception e) {} }
+            
+            if (connection != null) { connection.close(); }
+            
+        }
         
     }
 
